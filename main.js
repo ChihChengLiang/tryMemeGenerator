@@ -11,11 +11,11 @@ window.onload = function() {
   var drawImg = function() {
     ctx.drawImage(img, 0, 0, 300, 400);
   }
-  var drawText = function(text, top) {
+  var drawTextLine = function(text, top) {
     ctx.font = "30px Impact";
     ctx.fillStyle = "white";
     ctx.strokeStyle = "black";
-    var position = top ? [10, 50] :[10, 350];
+    var position = top ? [10, 50] : [10, 350];
 
 
     var params = [text].concat(position);
@@ -24,19 +24,23 @@ window.onload = function() {
     ctx.strokeText.apply(ctx, params);
   }
 
-  captionInput.addEventListener("keyup", function(){
+  var drawWholeText = function() {
     lines = captionInput.value.split("\n");
     topLine = lines[0];
     bottomLine = lines[1] || "";
     csl.innerHTML = topLine + "<br>" + bottomLine;
+    drawTextLine(topLine, true);
+    drawTextLine(bottomLine);
+  }
+
+  captionInput.addEventListener("keyup", function() {
     drawImg();
-    drawText(topLine, true);
-    drawText(bottomLine);
+    drawWholeText();
   }, false);
 
   img.addEventListener("load", function() {
     drawImg();
-    drawText("Write some awesome text", true);
+    drawWholeText();
   }, false);
 
   var downloadCanvas = function(link, filename) {
@@ -44,7 +48,7 @@ window.onload = function() {
     link.download = filename;
   }
 
-  btnDownload.addEventListener("click", function(){
+  btnDownload.addEventListener("click", function() {
     downloadCanvas(this, "foo.png");
   });
 }
