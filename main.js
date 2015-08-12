@@ -9,25 +9,33 @@ window.onload = function() {
   var img = new Image();
   img.src = "/cat.jpg";
 
+  ctx.font = "30px Impact";
+  ctx.fillStyle = "white";
+  ctx.strokeStyle = "black";
+
   var drawImg = function() {
     ctx.drawImage(img, 0, 0, 300, 400);
   }
-  var drawTextLine = function(text, top) {
-    ctx.font = "30px Impact";
-    ctx.fillStyle = "white";
-    ctx.strokeStyle = "black";
-    var position = top ? [10, 50] : [10, 350];
 
-
-    var params = [text].concat(position);
-
+  var drawText = function(text, x, y) {
+    var params = [text, x, y];
     ctx.fillText.apply(ctx, params);
     ctx.strokeText.apply(ctx, params);
   }
 
+  var drawTextLine = function(text, top) {
+    var lines = text.split("\n");
+    for (ii = 0; ii < lines.length; ii++) {
+      var wid = ctx.measureText(lines[ii]).width;
+      var x = canvas.width / 2 - wid / 2;
+      var y = (top ? 50 : 350) + 30 * ii;
+      drawText(lines[ii], x, y);
+    }
+  }
+
   var drawWholeText = function() {
-    topLine = topCaption.value;
-    bottomLine = bottomCaption.value;
+    topLine = topCaption.value.toUpperCase();
+    bottomLine = bottomCaption.value.toUpperCase();
     drawTextLine(topLine, true);
     drawTextLine(bottomLine);
   }
