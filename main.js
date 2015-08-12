@@ -18,7 +18,7 @@ window.onload = function() {
   }
 
   var drawText = function(text, x, y) {
-    var params = [text, x, y];
+    var params = [text, x, y, canvas.width];
     ctx.fillText.apply(ctx, params);
     ctx.strokeText.apply(ctx, params);
   }
@@ -27,7 +27,7 @@ window.onload = function() {
     var lines = text.split("\n");
     for (ii = 0; ii < lines.length; ii++) {
       var wid = ctx.measureText(lines[ii]).width;
-      var x = canvas.width / 2 - wid / 2;
+      var x = canvas.width > wid ? canvas.width / 2 - wid / 2 : 0;
       var y = (top ? 50 : 350) + 30 * ii;
       drawText(lines[ii], x, y);
     }
