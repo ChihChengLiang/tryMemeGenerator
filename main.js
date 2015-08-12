@@ -1,6 +1,7 @@
 window.onload = function() {
   var canvas = document.getElementById('main-canvas');
-  var captionInput = document.getElementById('captions');
+  var topCaption = document.getElementById('top-caption');
+  var bottomCaption = document.getElementById('bottom-caption');
   var csl = document.getElementById('csl');
   var btnDownload = document.getElementById('download');
   var ctx = canvas.getContext('2d');
@@ -25,18 +26,18 @@ window.onload = function() {
   }
 
   var drawWholeText = function() {
-    lines = captionInput.value.split("\n");
-    topLine = lines[0];
-    bottomLine = lines[1] || "";
-    csl.innerHTML = topLine + "<br>" + bottomLine;
+    topLine = topCaption.value;
+    bottomLine = bottomCaption.value;
     drawTextLine(topLine, true);
     drawTextLine(bottomLine);
   }
 
-  captionInput.addEventListener("keyup", function() {
+  var render = function() {
     drawImg();
     drawWholeText();
-  }, false);
+  }
+  topCaption.addEventListener("keyup", render, false);
+  bottomCaption.addEventListener("keyup", render, false);
 
   img.addEventListener("load", function() {
     drawImg();
