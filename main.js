@@ -6,20 +6,21 @@ window.onload = function() {
   var btnDownload = document.getElementById('download');
   var sampleMemes = document.getElementById('sample-memes');
   var ctx = canvas.getContext('2d');
+  var canvasMaxWidth = 300;
+  var margin = 0.05;
 
   var img = new Image();
   img.src = "/cat.jpg";
 
-  ctx.font = "30px Impact";
-  ctx.fillStyle = "white";
-  ctx.strokeStyle = "black";
-
   var drawImg = function() {
-    ctx.drawImage(img, 0, 0, 300, 400);
+    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
   }
 
   var drawText = function(text, x, y) {
     var params = [text, x, y, canvas.width];
+    ctx.font = "30px Impact";
+    ctx.fillStyle = "white";
+    ctx.strokeStyle = "black";
     ctx.fillText.apply(ctx, params);
     ctx.strokeText.apply(ctx, params);
   }
@@ -29,7 +30,7 @@ window.onload = function() {
     for (ii = 0; ii < lines.length; ii++) {
       var wid = ctx.measureText(lines[ii]).width;
       var x = canvas.width > wid ? canvas.width / 2 - wid / 2 : 0;
-      var y = (top ? 50 : 350) + 30 * ii;
+      var y = (top ? 30 : canvas.height - 30) + 30 * ii;
       drawText(lines[ii], x, y);
     }
   }
@@ -75,8 +76,16 @@ window.onload = function() {
       var data = resp.data;
       Object.keys(data).map(function(key) {
         var memeImg = document.createElement('img');
-        memeImg.setAttribute("src", data[key].file);
+        var src = data[key].file;
+        memeImg.setAttribute("src", src);
         memeImg.setAttribute("alt", data[key].name);
+        memeImg.addEventListener("click", function() {
+          img.src = src;
+          canvas.height = data[key].original_meta.height *
+            canvasMaxWidth / data[key].original_meta.width;
+
+          render();
+        })
         sampleMemes.appendChild(memeImg);
       });
 

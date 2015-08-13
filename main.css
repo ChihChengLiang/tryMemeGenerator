@@ -1,6 +1,11 @@
 #main-canvas {
   border: 1px solid black;
 }
+#sample-memes{
+  width: 320px;
+  height: 220px;
+  overflow-y: scroll;
+}
 #sample-memes img {
   width: 100px;
   height: 100px;
