@@ -120,11 +120,13 @@ window.onload = function() {
     }
     if (this.value != "") {
       var pattern = new RegExp(this.value, 'i');
-      var results = Object.keys(data).filter(function(key) {
-        return pattern.test(data[key].name);
-      }).map(function(key) {
-        return data[key]
-      });
+      var results = Object.keys(data)
+        .filter(function(key) {
+          return pattern.test(data[key].name);
+        })
+        .map(function(key) {
+          return data[key];
+        });
       console.log(results);
       results.slice(0, 4).map(createSuggestionElement);
     }
