@@ -74,7 +74,7 @@ window.onload = function() {
       var resp = JSON.parse(xhr.responseText);
       console.log(resp.data);
       var data = resp.data;
-      Object.keys(data).map(function(key) {
+      Object.keys(data).slice(0, 20).map(function(key) {
         var memeImg = document.createElement('img');
         var src = data[key].file;
         memeImg.setAttribute("src", src);
