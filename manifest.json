@@ -11,6 +11,9 @@
   },
   "permissions": [
     "activeTab",
-    "https://ajax.googleapis.com/"
+    "https://ajax.googleapis.com/",
+    "http://*/",
+    "http://memeful.com",
+    "http://i.memeful.com"
   ]
 }

@@ -60,4 +60,17 @@ window.onload = function() {
   btnDownload.addEventListener("click", function() {
     downloadCanvas(this, "foo.png");
   });
+
+  var xhr = new XMLHttpRequest();
+  xhr.open("GET", "http://i.memeful.com/api/all", true);
+
+
+  xhr.onreadystatechange = function() {
+    if (xhr.readyState == 4) {
+      // JSON.parse does not evaluate the attacker's scripts.
+      var resp = JSON.parse(xhr.responseText);
+      console.log(resp.data);
+    }
+  }
+  xhr.send();
 }
