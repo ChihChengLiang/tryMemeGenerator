@@ -3,11 +3,20 @@
 }
 #sample-memes{
   width: 320px;
-  height: 220px;
+  height: 150px;
   overflow-y: scroll;
 }
 #sample-memes img {
   width: 100px;
   height: 100px;
   object-fit: cover;
+}
+ ul {
+  list-style-type: none;
+  padding:0;
+  margin:0;
+}
+.thumb{
+  width: 20px;
+  height: 20px;
 }

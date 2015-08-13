@@ -63,33 +63,71 @@ window.onload = function() {
     downloadCanvas(this, "foo.png");
   });
 
+  var updateCanvasImage = function(memeObj) {
+    return function() {
+      img.src = memeObj.file;
+      canvas.height = memeObj.original_meta.height *
+        canvasMaxWidth / memeObj.original_meta.width;
+      render();
+    }
+  }
+
   var xhr = new XMLHttpRequest();
   var url = "http://i.memeful.com/api/all";
   xhr.open("GET", url, true);
 
+  var data = {};
 
   xhr.onreadystatechange = function() {
     if (xhr.readyState == 4) {
       // JSON.parse does not evaluate the attacker's scripts.
       var resp = JSON.parse(xhr.responseText);
       console.log(resp.data);
-      var data = resp.data;
+      data = resp.data;
       Object.keys(data).slice(0, 20).map(function(key) {
         var memeImg = document.createElement('img');
-        var src = data[key].file;
-        memeImg.setAttribute("src", src);
+        memeImg.setAttribute("src", data[key].thumbnail);
         memeImg.setAttribute("alt", data[key].name);
-        memeImg.addEventListener("click", function() {
-          img.src = src;
-          canvas.height = data[key].original_meta.height *
-            canvasMaxWidth / data[key].original_meta.width;
-
-          render();
-        })
+        memeImg.addEventListener("click", updateCanvasImage(data[key]));
         sampleMemes.appendChild(memeImg);
       });
 
     }
   }
   xhr.send();
+
+  var searchBar = document.getElementById('search-bar');
+  var searchSuggestions = document.getElementById('search-suggestions');
+
+  var createSuggestionElement = function(memeObj) {
+    var suggestion = document.createElement('li');
+    var container = document.createElement('div');
+    var suggestionImg = document.createElement('img');
+    suggestionImg.src = memeObj.thumbnail;
+    suggestionImg.setAttribute("class", "thumb");
+    var t = document.createTextNode(memeObj.name);
+    container.appendChild(suggestionImg);
+    container.appendChild(t);
+    container.addEventListener("click", updateCanvasImage(memeObj));
+    suggestion.appendChild(container);
+    searchSuggestions.appendChild(suggestion);
+  }
+
+  searchBar.addEventListener("keyup", function() {
+    console.log(this.value);
+    while (searchSuggestions.firstChild) {
+      searchSuggestions.removeChild(searchSuggestions.firstChild);
+    }
+    if (this.value != "") {
+      var pattern = new RegExp(this.value, 'i');
+      var results = Object.keys(data).filter(function(key) {
+        return pattern.test(data[key].name);
+      }).map(function(key) {
+        return data[key]
+      });
+      console.log(results);
+      results.slice(0, 4).map(createSuggestionElement);
+    }
+  });
+
 }
