@@ -4,6 +4,7 @@ window.onload = function() {
   var bottomCaption = document.getElementById('bottom-caption');
   var csl = document.getElementById('csl');
   var btnDownload = document.getElementById('download');
+  var sampleMemes = document.getElementById('sample-memes');
   var ctx = canvas.getContext('2d');
 
   var img = new Image();
@@ -62,7 +63,8 @@ window.onload = function() {
   });
 
   var xhr = new XMLHttpRequest();
-  xhr.open("GET", "http://i.memeful.com/api/all", true);
+  var url = "http://i.memeful.com/api/all";
+  xhr.open("GET", url, true);
 
 
   xhr.onreadystatechange = function() {
@@ -70,6 +72,14 @@ window.onload = function() {
       // JSON.parse does not evaluate the attacker's scripts.
       var resp = JSON.parse(xhr.responseText);
       console.log(resp.data);
+      var data = resp.data;
+      Object.keys(data).map(function(key) {
+        var memeImg = document.createElement('img');
+        memeImg.setAttribute("src", data[key].file);
+        memeImg.setAttribute("alt", data[key].name);
+        sampleMemes.appendChild(memeImg);
+      });
+
     }
   }
   xhr.send();
