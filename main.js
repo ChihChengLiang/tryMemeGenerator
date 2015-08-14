@@ -106,6 +106,7 @@ window.onload = function() {
     suggestionImg.src = memeObj.thumbnail;
     suggestionImg.setAttribute("class", "thumb");
     var t = document.createTextNode(memeObj.name);
+    container.setAttribute("class", "suggestion-item")
     container.appendChild(suggestionImg);
     container.appendChild(t);
     container.addEventListener("click", updateCanvasImage(memeObj));
