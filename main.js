@@ -64,12 +64,11 @@ window.onload = function() {
   });
 
   var updateCanvasImage = function(memeObj) {
-    return function() {
-      img.src = memeObj.file;
-      canvas.height = memeObj.original_meta.height *
-        canvasMaxWidth / memeObj.original_meta.width;
-      render();
-    }
+    img.src = memeObj.file;
+    canvas.height = memeObj.original_meta.height *
+      canvasMaxWidth / memeObj.original_meta.width;
+    render();
+
   }
 
   var xhr = new XMLHttpRequest();
@@ -88,7 +87,9 @@ window.onload = function() {
         var memeImg = document.createElement('img');
         memeImg.setAttribute("src", data[key].thumbnail);
         memeImg.setAttribute("alt", data[key].name);
-        memeImg.addEventListener("click", updateCanvasImage(data[key]));
+        memeImg.addEventListener("click", function() {
+          updateCanvasImage(data[key]);
+        });
         sampleMemes.appendChild(memeImg);
       });
 
@@ -109,16 +110,18 @@ window.onload = function() {
     container.setAttribute("class", "suggestion-item")
     container.appendChild(suggestionImg);
     container.appendChild(t);
-    container.addEventListener("click", updateCanvasImage(memeObj));
+    container.addEventListener("mousedown", function(e) {
+      e.preventDefault();
+      updateCanvasImage(memeObj);
+    });
     suggestion.appendChild(container);
     searchSuggestions.appendChild(suggestion);
   }
 
   searchBar.addEventListener("keyup", function() {
     console.log(this.value);
-    while (searchSuggestions.firstChild) {
-      searchSuggestions.removeChild(searchSuggestions.firstChild);
-    }
+    cleanUpChildren(searchSuggestions);
+
     if (this.value != "") {
       var pattern = new RegExp(this.value, 'i');
       var results = Object.keys(data)
@@ -132,5 +135,13 @@ window.onload = function() {
       results.slice(0, 4).map(createSuggestionElement);
     }
   });
+  searchBar.addEventListener("blur", function() {
+    setTimeout(cleanUpChildren(this), 500);
+  })
 
+  var cleanUpChildren = function(element) {
+    while (searchSuggestions.firstChild) {
+      searchSuggestions.removeChild(searchSuggestions.firstChild);
+    }
+  }
 }
