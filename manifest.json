@@ -2,11 +2,16 @@
   "manifest_version": 2,
 
   "name": "Meme Generator",
-  "description": "This extension generate a meme for you.",
+  "description": "Generate memes like a boss.",
   "version": "1.0",
 
+  "icons": {
+    "16": "icon16.png",
+    "48": "icon48.png",
+    "128": "icon128.png"
+  },
+
   "browser_action": {
-    /*"default_icon": "icon.jpg",*/
     "default_popup": "popup.html"
   },
   "permissions": [
